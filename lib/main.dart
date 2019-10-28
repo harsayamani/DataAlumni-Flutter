@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
 void main() => runApp(new DataAlumni());
 
@@ -18,17 +20,33 @@ class DataAlumniHomePage extends StatefulWidget{
 }
 
 class _DataAlumniHomePage extends State<DataAlumniHomePage>{
+
+  TextEditingController user = new TextEditingController();
+  TextEditingController pass = new TextEditingController();
+
+  Future<List> _login() async {
+    final response = await http.post("http://localhost/KEPL/api/login.php", body:{
+        "username":user.text,
+        "password":pass.text,
+      }
+    );
+
+    print(response.body);
+  } 
+
   @override
   Widget build(BuildContext context) {
 
-    final judul = Text(
-      'LOGIN'
+    final judul = Center(
+      child: Text(
+      'LOGIN', style: TextStyle(fontSize: 30),
+      ),
     );
 
     final username = TextFormField(
+      controller: user,
       keyboardType: TextInputType.text,
       autofocus: false,
-      initialValue: '',
       decoration: InputDecoration(
         hintText: "Masukkan Username",
         contentPadding: EdgeInsets.fromLTRB(
@@ -41,9 +59,9 @@ class _DataAlumniHomePage extends State<DataAlumniHomePage>{
     );
 
     final password = TextFormField(
+      controller: pass,
       keyboardType: TextInputType.visiblePassword,
       autofocus: false,
-      initialValue: '',
       decoration: InputDecoration(
         hintText: "Masukkan Password",
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -58,7 +76,9 @@ class _DataAlumniHomePage extends State<DataAlumniHomePage>{
       child: Text(
         'Login', style: TextStyle(color: Colors.white),
       ),
-      onPressed: (){},
+      onPressed: (){
+        _login();
+      },
     );
     
     
